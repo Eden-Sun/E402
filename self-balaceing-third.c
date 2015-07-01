@@ -120,7 +120,7 @@ void sample_inputs()  {
   hiresgyrosum = 0;
   
   accraw = analogRead(1); //read the accelerometer pin (0-1023)
-  adc4 = analogRead(0);
+  adc4 = analogRead(0);  //read turning sensor
 	steersum = adc4;
 	sysclk=0;
 	//Take a set of 7 readings very fast
@@ -635,48 +635,6 @@ t2clk=~t2clk;
        overallgain = (float)overallgain + 0.005;
                           }
    if (overallgain > 0.5) {overallgain = 0.5;}
- //XXXXXXXXXXXXXXX end of softstart code XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-  
-
-	
+ //XXXXXXXXXXXXXXX end of softstart code XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX	
 }
 
-/*
-	void PWM(unsigned char buf) 
-{
-	
-		if(buf==0){  //all stop
-			CCAPM2=0x00;
-			CCAPM3=0x00;
-			CCAPM4=0x00;
-			CCAPM5=0x00;
-		}
-		else if(buf<64){
-			
-			CCAP2H=255-(buf*4);
-			CCAPM2=0x42;
-			CCAPM3=0x00;
-		}else if(buf<128){
-			
-			CCAPM2=0x00;
-			CCAPM3=0x42;
-			CCAP3H=(buf-64)*4;
-			
-		}else if(buf<192){
-			
-			CCAPM4=0x42;
-			CCAP4H=255-((buf-128)*4);
-			CCAPM5=0x00;
-			
-		}else {
-			
-			CCAPM4=0x00;
-			CCAPM5=0x42;
-			CCAP5H=((buf-192)*4);
-			
-		}
-	
-}
-
-*/
