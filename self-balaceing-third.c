@@ -642,6 +642,7 @@ t2clk=~t2clk;
 	
 }
 
+/*
 	void PWM(unsigned char buf) 
 {
 	
@@ -677,3 +678,5 @@ t2clk=~t2clk;
 		}
 	
 }
+
+*/
