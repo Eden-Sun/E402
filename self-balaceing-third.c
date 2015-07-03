@@ -471,12 +471,12 @@ void waitstartloop ()   {
     t = analogRead(7);   //highgyro
 	}
 	for (i=0; i<100; i++) {
-  	S2CON&=0xfd;
-		S2BUF=0xaa;
-		while((S2CON&0x02)==0);
-		S2CON&=0xfd;
-		delay=500;
-		while(delay--);
+  	S2CON&=0xfd;         //Clear uart2 TI 
+		S2BUF=0xaa;          //Driver send 'aa'(HEX) to automatic baudrate
+		while((S2CON&0x02)==0); //wait uart2 TI flag 
+		S2CON&=0xfd;         //Clear uart2 TI
+		delay=500;           //wait command process
+		while(delay--);				//wait delay=0
 	}
     for (i=0; i<4000; i++) {
   	delay=100;
@@ -556,7 +556,32 @@ main()
 	P1M0=0xc3;
 	//P1M1=0x08; //push pull on s2tx
 	S2CON|=0x50;
-	S2BRT=256-3;
+	S2BRT=256-3;TMOD=0x22;  //----------- T0 T1 8BIT 3AUTO RELOADE MODE 
+	TH0=253;   //PWM=f/256/18=400MHZ @22M
+	TL0=253;  //PWM
+	TH1=250; //255  
+	TL1=250;  //255
+	AUXR2=0xd8;  //t1 t0 X12  S2MOD=1 UART2 BAUDRATE
+	TR1=1;     //-------------T1 START
+	TR0=1;  	 //-------------T2 START
+	SCON=0x50; //-------------enable URAT1  8-BIT Variable 
+	TL2=0;     //------------- T2 
+	TH2=256-72;//------------- T2
+	RCAP2L=TL2;//------------- AUTO RELOAD  BE RELOAD DATA
+	RCAP2H=TH2;//------------- AUTO RELOAD
+	IT0=1;     //------------- T0 INTERRUPT
+	//PCON|=0x80;  //BR*2
+	CMOD=0x04; //------------- PWM COUNTER
+	CR=1;      //------------- PCA START
+	IE=0xb1;   //------------- GLOBAL TIMER2 EX0
+	P06=0;     //------------- AD6
+	issteer=1;
+	P2=0xaa;   //------------- 10101010
+	P3=0xff;   //------------- 11111111
+	P1M0=0xc3; //------------- ADC
+	//P1M1=0x08; //push pull on s2tx
+	S2CON|=0x50; //-------------UART2 8BIT VARIABLE START
+	S2BRT=256-3; //------------- BAUDRATE 38400
 	waitstartloop();
 	while(1);
 	
