@@ -17,7 +17,7 @@ int lastLoopUsefulTime =9;
 unsigned long loopStartTime = 0;
 
 int initial_balancetrim=372;//362
-sbit issteer=P2^0;       //«Å§i¨¤¦ìªº­È
+sbit issteer=P2^0;       //define turning pin
 sbit dir=P2^3;
 sbit green=P2^2;
 sbit yellow=P2^1;
