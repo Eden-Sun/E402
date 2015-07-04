@@ -4,10 +4,10 @@
 
 #define SABER_MOTOR2_FULL_FORWARD 255
 #define SABER_MOTOR2_FULL_REVERSE 129
-//
+
 int AN;
 int tt3,tt4,tt5;
-float aan,ban,can,dan;//轉換變數
+float aan,ban,can,dan;// 轉換變數
 int r=0,rd=0,ri=0;
 char rr='9';
 
@@ -17,7 +17,7 @@ int lastLoopUsefulTime =9;
 unsigned long loopStartTime = 0;
 
 int initial_balancetrim=372;//362
-sbit issteer=P2^0;       //宣告角位的值
+sbit issteer=P2^0;       //define turning pin
 sbit dir=P2^3;
 sbit green=P2^2;
 sbit yellow=P2^1;
@@ -173,11 +173,7 @@ void sample_inputs()  {
 		 if(er_sum<-5000)er_sum=-5000;
 	
 		/*if(!issteer)SteerValue=512-((adcsteer) - s)* 6;	
-<<<<<<< HEAD
 		if(issteer)SteerValue=512;	                            //àƳ ŢȢҍƎ
-=======
-		if(issteer)SteerValue=512;	                            //轉彎 手把專用
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 		else {
 			SteerValue=512-((adc4) - s)* 2;
 		}
@@ -390,11 +386,7 @@ void sample_inputs()  {
   cur_speed = (float) (cur_speed + ((anglerads-(0.0052*ri))* 5.5 * cycle_time)) *0.999;   //0.999	
 												 
 													 
-<<<<<<< HEAD
   //֌ɵ࠰̥ש ǹߣʩ	
-=======
-  //無延遲前進 完整版	
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 	/*		
 			r++;
 			if(r<125)
@@ -441,21 +433,13 @@ else if(r<4000)
 */													 
 													 
   
-<<<<<<< HEAD
 	//ŭࠅ												 
-=======
-	//平衡												 
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 		/*
 		balance_torque = (float) (4.5 * (anglerads)) + (0.5 * gangleraterads);   //4.5
    cur_speed = (float) (cur_speed + ((anglerads-0.002*r)* 5.5 * cycle_time)) *0.999;   //0.999
 		*/											 
 													 
-<<<<<<< HEAD
 	//Ƴɵ࠰̥ש												 
-=======
-	//有延遲前進												 
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 	/*
 						r++;							 
 if(r<250)
@@ -487,11 +471,7 @@ else
   
 }
 
-<<<<<<< HEAD
  /*void sendduty(char left,char power){          //ӄŔƎֻơ
-=======
- /*void sendduty(char left,char power){          //第三代程式
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 	unsigned char back=(power<0);
 	unsigned char num=left>0?131:135;
 	unsigned char duty=power*1.26*(power<0?-1:1);
@@ -499,11 +479,7 @@ else
 	
 
 	
-<<<<<<< HEAD
  	S2BUF=num;                       //Ǫǃׇࠩ2  ͝Έ
-=======
- 	S2BUF=num;                       //串列傳輸2  看值
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 	while((S2CON&0x02)==0);
 	S2CON&=0xfd;
  
@@ -566,11 +542,7 @@ void set_motor()   {
 	
  
 		
-<<<<<<< HEAD
 /*									 SBUF	='L';         //͝Έ!!!
-=======
-/*									 SBUF	='L';         //看值!!!
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 		while(TI==0);
 		TI=0;
 		
@@ -587,11 +559,7 @@ void set_motor()   {
 		while(TI==0);
 		TI=0;
 */	
-<<<<<<< HEAD
 		SBUF	='1';         //͝Έ!!!
-=======
-		SBUF	='1';         //看值!!!
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 		while(TI==0);
 		TI=0;
 		
@@ -1030,11 +998,7 @@ main()
 	TR0=1;
 		SCON=0x50;
 	TL2=0;
-<<<<<<< HEAD
 	TH2=256-36;        //ӄŇƎҍƎ
-=======
-	TH2=256-36;        //第二代專用
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 	RCAP2L=TL2;
 	RCAP2H=TH2;	  
 	IT0=1;
@@ -1062,11 +1026,7 @@ main()
 		if(!pulseR)pulsecountR++;
 		else pulsecountR--;
 	}
-<<<<<<< HEAD
 	void uart(void) interrupt 4            //ѱɮSEGWAY   ǪǃĤß
-=======
-	void uart(void) interrupt 4            //控制SEGWAY   串列中斷
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 {
 	if(TI){
 		TI=0;
@@ -1161,11 +1121,7 @@ t2clk=~t2clk;
 	
 }
 
-<<<<<<< HEAD
 	void PWM(unsigned char buf)     //ࠩƘPWM
-=======
-	void PWM(unsigned char buf)     //輸出PWM
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 {
 	
 		if(buf==0){  //all stop
@@ -1183,11 +1139,7 @@ t2clk=~t2clk;
 			
 			CCAPM2=0x00;
 			CCAPM3=0x42;
-<<<<<<< HEAD
 			CCAP3H=(buf-64)*4;            //2.3ŀӕ
-=======
-			CCAP3H=(buf-64)*4;            //2.3一組
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 			
 		}else if(buf<192){
 			
@@ -1199,11 +1151,7 @@ t2clk=~t2clk;
 			
 			CCAPM4=0x00;
 			CCAPM5=0x42;
-<<<<<<< HEAD
 			CCAP5H=((buf-192)*4);         //4.5ŀӕ  
-=======
-			CCAP5H=((buf-192)*4);         //4.5一組 
->>>>>>> 0294a5018d46dc8fb3257668e2c890970e1ef258
 			
 		}
 	
