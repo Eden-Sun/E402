@@ -7,7 +7,7 @@
 
 int AN;
 int tt3,tt4,tt5;
-float aan,ban,can,dan;// è½‰æ›è®Šæ•¸
+float aan,ban,can,dan;//Âà´«ÅÜ¼Æ
 int r=0,rd=0,ri=0;
 char rr='9';
 
@@ -17,7 +17,7 @@ int lastLoopUsefulTime =9;
 unsigned long loopStartTime = 0;
 
 int initial_balancetrim=372;//362
-sbit issteer=P2^0;       //define turning pin
+sbit issteer=P2^0;       //«Å§i¨¤¦ìªº­È
 sbit dir=P2^3;
 sbit green=P2^2;
 sbit yellow=P2^1;
