@@ -7,7 +7,7 @@
 
 int AN;
 int tt3,tt4,tt5;
-float aan,ban,can,dan;//�ഫ�ܼ�
+float aan,ban,can,dan;// 轉換變數
 int r=0,rd=0,ri=0;
 char rr='9';
 
