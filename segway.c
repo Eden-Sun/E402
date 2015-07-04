@@ -1,5 +1,5 @@
 #include <516.h>
-#define SABER_MOTOR1_FULL_FORWARD 127
+#defiane SABER_MOTOR1_FULL_FORWARD 127
 #define SABER_MOTOR1_FULL_REVERSE 1
 
 #define SABER_MOTOR2_FULL_FORWARD 255
@@ -108,8 +108,8 @@ unsigned int analogRead(char channel)
 {
     AUXR&=0x8F;                                 //3]ADRJ=0
     channel &= 0x07;                            
-    ADCTL = 0x88|channel;                       //?}clAa¡¦?  //-i?¢X ADCTL = 0x88|channel;
-    while(!(ADCTL & 0x10));                    //¢X_¢XEAa¡¦?-P¡Âa                 
+    ADCTL = 0x88|channel;                       //?}clAaf?  //-i?Ã˜ ADCTL = 0x88|channel;
+    while(!(ADCTL & 0x10));                    //Ã˜_Ã˜EAaf?-PÂ‚a                 
     return ((unsigned int)(ADCH<<2) | (ADCL & 3));
 }
 
@@ -173,7 +173,7 @@ void sample_inputs()  {
 		 if(er_sum<-5000)er_sum=-5000;
 	
 		/*if(!issteer)SteerValue=512-((adcsteer) - s)* 6;	
-		if(issteer)SteerValue=512;	                            //ÂàÅs ¤â§â±M¥Î
+		if(issteer)SteerValue=512;	                            //Ã Æ³ Å¢È¢ÒÆŽ
 		else {
 			SteerValue=512-((adc4) - s)* 2;
 		}
@@ -386,7 +386,7 @@ void sample_inputs()  {
   cur_speed = (float) (cur_speed + ((anglerads-(0.0052*ri))* 5.5 * cycle_time)) *0.999;   //0.999	
 												 
 													 
-  //µL©µ¿ð«e¶i §¹¾ãª©	
+  //ÖŒÉµà °Ì¥×© Ç¹ß£Ê©	
 	/*		
 			r++;
 			if(r<125)
@@ -433,13 +433,13 @@ else if(r<4000)
 */													 
 													 
   
-	//¥­¿Å												 
+	//Å­à …												 
 		/*
 		balance_torque = (float) (4.5 * (anglerads)) + (0.5 * gangleraterads);   //4.5
    cur_speed = (float) (cur_speed + ((anglerads-0.002*r)* 5.5 * cycle_time)) *0.999;   //0.999
 		*/											 
 													 
-	//¦³©µ¿ð«e¶i												 
+	//Æ³Éµà °Ì¥×©												 
 	/*
 						r++;							 
 if(r<250)
@@ -471,7 +471,7 @@ else
   
 }
 
- /*void sendduty(char left,char power){          //²Ä¤T¥Nµ{¦¡
+ /*void sendduty(char left,char power){          //Ó„Å”ÆŽÖ»Æ¡
 	unsigned char back=(power<0);
 	unsigned char num=left>0?131:135;
 	unsigned char duty=power*1.26*(power<0?-1:1);
@@ -479,7 +479,7 @@ else
 	
 
 	
- 	S2BUF=num;                       //¦ê¦C¶Ç¿é2  ¬Ý­È
+ 	S2BUF=num;                       //ÇªÇƒ×‡à ©2  ÍÎˆ
 	while((S2CON&0x02)==0);
 	S2CON&=0xfd;
  
@@ -542,7 +542,7 @@ void set_motor()   {
 	
  
 		
-/*									 SBUF	='L';         //¬Ý­È!!!
+/*									 SBUF	='L';         //ÍÎˆ!!!
 		while(TI==0);
 		TI=0;
 		
@@ -559,7 +559,7 @@ void set_motor()   {
 		while(TI==0);
 		TI=0;
 */	
-		SBUF	='1';         //¬Ý­È!!!
+		SBUF	='1';         //ÍÎˆ!!!
 		while(TI==0);
 		TI=0;
 		
@@ -998,7 +998,7 @@ main()
 	TR0=1;
 		SCON=0x50;
 	TL2=0;
-	TH2=256-36;        //²Ä¤G¥N±M¥Î
+	TH2=256-36;        //Ó„Å‡ÆŽÒÆŽ
 	RCAP2L=TL2;
 	RCAP2H=TH2;	  
 	IT0=1;
@@ -1026,7 +1026,7 @@ main()
 		if(!pulseR)pulsecountR++;
 		else pulsecountR--;
 	}
-	void uart(void) interrupt 4            //±±¨îSEGWAY   ¦ê¦C¤¤Â_
+	void uart(void) interrupt 4            //Ñ±É®SEGWAY   ÇªÇƒÄ¤ÃŸ
 {
 	if(TI){
 		TI=0;
@@ -1121,7 +1121,7 @@ t2clk=~t2clk;
 	
 }
 
-	void PWM(unsigned char buf)     //¿é¥XPWM
+	void PWM(unsigned char buf)     //à ©Æ˜PWM
 {
 	
 		if(buf==0){  //all stop
@@ -1139,7 +1139,7 @@ t2clk=~t2clk;
 			
 			CCAPM2=0x00;
 			CCAPM3=0x42;
-			CCAP3H=(buf-64)*4;            //2.3¤@²Õ
+			CCAP3H=(buf-64)*4;            //2.3Å€Ó•
 			
 		}else if(buf<192){
 			
@@ -1151,7 +1151,7 @@ t2clk=~t2clk;
 			
 			CCAPM4=0x00;
 			CCAPM5=0x42;
-			CCAP5H=((buf-192)*4);         //4.5¤@²Õ  
+			CCAP5H=((buf-192)*4);         //4.5Å€Ó•  
 			
 		}
 	
