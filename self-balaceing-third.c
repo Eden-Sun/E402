@@ -103,7 +103,7 @@ unsigned int analogRead(char channel)
 	AUXR&=0x8F;                                 //3]ADRJ=0
 	channel &= 0x07;                            
 	ADCTL = 0x88|channel;                       //?}clAa?  //-i??ADCTL = 0x88|channel;
-	while(!(ADCTL & 0x10));                    //°_°EAa?-P¯a                 
+	while(!(ADCTL & 0x10));                    //ÑŸÑ…Aa?-PÐ¡                 
 	return ((unsigned int)(ADCH<<2) | (ADCL & 3));
 }
 
