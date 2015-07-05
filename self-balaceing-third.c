@@ -4,7 +4,7 @@
 
 #define SABER_MOTOR2_FULL_FORWARD 255
 #define SABER_MOTOR2_FULL_REVERSE 129
-
+// 中文註解測試test
 int STD_LOOP_TIME = 9;
 int lastLoopTime = 9;
 int lastLoopUsefulTime =9;
@@ -100,10 +100,10 @@ signed char Motor2percent;
 
 unsigned int analogRead(char channel)
 {
-	AUXR&=0x8F;                                 //3]ADRJ=0
-channel &= 0x07;                            
-	ADCTL = 0x88|channel;                       //?}clAa�?  //-i?� ADCTL = 0x88|channel;
-	while(!(ADCTL & 0x10));                    //�_�EAa�?-P�a                 
+	AUXR&=0x8F;                                 // ADRJ=0 啟動ADC
+	channel &= 0x07;                            
+	ADCTL = 0x88|channel;                       //指定ADC腳位
+	while(!(ADCTL & 0x10));                    // 等待SDC讀取完成                
 	return ((unsigned int)(ADCH<<2) | (ADCL & 3));
 }
 
