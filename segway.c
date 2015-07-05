@@ -873,67 +873,51 @@ void set_motor()   {
 	if (tt5<0){
 			SBUF	=	'-';
 			tt5=-tt5;
-		}
-		else SBUF	=	' ';
-		while(TI==0);
-		TI=0;
-		
-		SBUF	=	(tt5/10000)+48;
-		while(TI==0);
-		TI=0;
-		
-		SBUF	=	((tt5 % 10000)/1000)+48;
-		while(TI==0);
-		TI=0;
-	  
-		SBUF	=	((tt5 % 1000)/100)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	((tt5 % 100)/10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	(tt5 % 10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=',';
-		while(TI==0);
-		TI=0;
+	}
+	else SBUF	=	' ';
+	while(TI==0);
+	TI=0;
 	
-							 
-		/*
-		delay=5000;
-		while(delay>0){
-		delay--;}*/
-		
-
-		
-	sysclk=1;
-   //Serial.write (cSpeedVal_Motor1);
-  // Serial.write (cSpeedVal_Motor2);
- 
+	SBUF	=	(tt5/10000)+48;
+	while(TI==0);
+	TI=0;
+	
+	SBUF	=	((tt5 % 10000)/1000)+48;
+	while(TI==0);
+	TI=0;
   
+	SBUF	=	((tt5 % 1000)/100)+48;
+	while(TI==0);
+	TI=0;
+	SBUF	=	((tt5 % 100)/10)+48;
+	while(TI==0);
+	TI=0;
+	SBUF	=	(tt5 % 10)+48;
+	while(TI==0);
+	TI=0;
+	SBUF	=',';
+	while(TI==0);
+	TI=0;
+
+	sysclk=1;
 }
 
-
-
-
-
-
-void waitstartloop ()   {   
+void waitstartloop ()   
+{   
   
-  tipstart = 0;
-  overallgain = 0;
-  cur_speed = 0;
-  level = 0;
-  Steer = 0;
-  balancetrim = 0;
-  for (i=0; i<200; i++) {
+	tipstart = 0;
+	overallgain = 0;
+	cur_speed = 0;
+	level = 0;
+	Steer = 0;
+	balancetrim = 0;
+	for (i=0; i<200; i++) {
   	
 		S2BUF=0xaa;
 		while((S2CON&0x02)==0);
 		S2CON&=0xfd;
 		s=analogRead(0);
-                         }
+	}
                       
     //now you have stepped away from baord having turned it on, we get 7 readings from each gyro (and a hires reading from the balance gyro)                     
     //g = (float) gyrosum/7;  //gyro balance value when stationary i.e. 1.35V
@@ -941,93 +925,78 @@ void waitstartloop ()   {
     //t = (float) hiresgyrosum/7; //hiresgyro balance output when stationary  i.e. about 1.38V
     
     
-		green=0;
-			while (tipstart < 5) {
-        for (i=0; i<10; i++) {
-                  sample_inputs();
-                  
-                             }
+	green=0;
+	while (tipstart < 5) {
+		for (i=0; i<10; i++) {
+			sample_inputs();
+		}
 	
   //x_accdeg is tilt angle from accelerometer in degrees                      
-              if (x_accdeg < -4 || x_accdeg > 4) {
+		if (x_accdeg < -4 || x_accdeg > 4) {
               //*****ADJUST THESE LIMITS TO SUIT YOUR BOARD SO TILTSTART KICKS IN WHERE YOU WANT IT TO*******
               //MY IMU IS NOT QUITE VERTICALLY MOUNTED
-                                  tipstart = 5;
-                                  overallgain = 0;
-                                  cur_speed = 0;
-                                  level = 0;
-                                  Steer = 0;
-                                  balancetrim = 0; 
-																
-                                                   }
-              else {
-                     tipstart = 5;
-                    }   
-       
+			tipstart = 5;
+			overallgain = 0;
+			cur_speed = 0;
+			level = 0;
+			Steer = 0;
+			balancetrim = 0; 
+										
+			}
+		else {
+			tipstart = 5;
+		}
     }
 	yellow=0;
-  
-
-overallgain = 0.3;  //softstart value. Gain will now rise to final of 0.5 at rate of 0.005 per program loop. 
+	overallgain = 0.3;  //softstart value. Gain will now rise to final of 0.5 at rate of 0.005 per program loop. 
 //i.e. it will go from 0.3 to 0.5 over the first 4 seconds after tipstart has been activated
-
-
-angle = 0;
-cur_speed = 0;
-Steering = 512;
-SteerValue = 512;
-balancetrim = 0;
-		
-		T2CON=0x04;  // TR2=1;
-         
-           
-  }
-
-
+	angle = 0;
+	cur_speed = 0;
+	Steering = 512;
+	SteerValue = 512;
+	balancetrim = 0;
+	T2CON=0x04;  // TR2=1;               
+}
 
 
 main()
-	{
+{
 	
-	TMOD=0x22;  
-	TH0=253;   //PWM=f/256/18=400MHZ @22M
+	TMOD=0x22;  // timer mode T1 & T0 run at mode 2
+	// setup Timer 0 
+	// timer 0 is for PWM frequency 
+
+	TH0=253;    //PWM=f/256/18=400MHZ @22M
 	TL0=253;  //PWM
 	TH1=250; //255  
 	TL1=250;  //255
 	AUXR2=0xd8;  //t1 t0 X12  S2MOD=1
-		TR1=1;
+	TR1=1;
 	TR0=1;
-		SCON=0x50;
+	SCON=0x50;
 	TL2=0;
 	TH2=256-36;        //ӄŇƎҍƎ
 	RCAP2L=TL2;
 	RCAP2H=TH2;	  
 	IT0=1;
-	PCON|=0x80;  //BR*2
-		
+	PCON|=0x80;  //BR*2	
 	CMOD=0x04;
-	CR=1;
-		
+	CR=1;		
 	IE=0xb1;
 	P2=0xff;
 	P3=0xff;
 	P1M0=0x0f;
 	S2CON|=0x50;
 	S2BRT=256-12;
-	
-	
-	
 	waitstartloop();
-	while(1);
-	
-	
+	while(1);	
 }
-	void EX0_int(void) interrupt 0     
-	{
-		if(!pulseR)pulsecountR++;
-		else pulsecountR--;
-	}
-	void uart(void) interrupt 4            //ѱɮSEGWAY   ǪǃĤß
+void EX0_int(void) interrupt 0     
+{
+	if(!pulseR)pulsecountR++;
+	else pulsecountR--;
+}
+void uart(void) interrupt 4            //ѱɮSEGWAY   ǪǃĤß
 {
 	if(TI){
 		TI=0;
