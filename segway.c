@@ -109,7 +109,7 @@ unsigned int analogRead(char channel)
 {
     AUXR&=0x8F;                                 //設ADRJ=0
     channel &= 0x07;                            
-    ADCTL = 0x88|channel;                       //?}clAaf?  //-i?Ø ADCTL = 0x88|channel;
+    ADCTL = 0x88|channel;                       //選擇 ADCTL = 0x88|channel;
     while(!(ADCTL & 0x10));                    //Ø_ØEAaf?-Pa                 
     return ((unsigned int)(ADCH<<2) | (ADCL & 3));
 }
