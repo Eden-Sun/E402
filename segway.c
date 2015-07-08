@@ -104,6 +104,9 @@ int j;
 int tipstart;
 signed char Motor1percent;
 signed char Motor2percent;
+#define TX_length_MAX 33  //
+unsigned char TXBUF[TX_length_MAX];
+unsigned char TXposistion=0;
 
 unsigned int analogRead(char channel)
 {
@@ -560,22 +563,13 @@ void set_motor()   {
 		while(TI==0);
 		TI=0;
 */	
-		SBUF	='1';         //͝Έ!!!
-		while(TI==0);
-		TI=0;
+		TXBUF[0]	='1';         //͝Έ!!!
 		
-		SBUF	='1';
-		while(TI==0);
-		TI=0;
+		TXBUF[1]	='1';
  
- 		SBUF	='1';
-		while(TI==0);
-		TI=0;
+ 		TXBUF[2]	='1';
 		
-		
-	  SBUF	=',';
-		while(TI==0);
-		TI=0;
+	  	TXBUF[3]	=',';
 		
 		
 		/////////////////////////////adc acc///////////////////////
@@ -697,33 +691,19 @@ void set_motor()   {
 	  aan=angle*100;
 		AN=aan;
 		if (AN<0){
-			SBUF	=	'-';
+			TXBUF[4]	=	'-';
 			AN=-AN;
 		}
-		else SBUF	=	' ';
-		while(TI==0);
-		TI=0;
+		else TXBUF[4]	=	' ';
 		
-		SBUF	=	(AN/10000)+48;
-		while(TI==0);
-		TI=0;
+		TXBUF[5]	=	(AN/10000)+48;
 		
-		SBUF	=	((AN % 10000)/1000)+48;
-		while(TI==0);
-		TI=0;
+		TXBUF[6]	=	((AN % 10000)/1000)+48;
 	  
-		SBUF	=	((AN % 1000)/100)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	((AN%100)/10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	(AN%10)+48;      //sync
-		while(TI==0);
-		TI=0;
-		SBUF	=',';
-		while(TI==0);
-		TI=0;
+		TXBUF[8]	=	((AN % 1000)/100)+48;
+		TXBUF[7]	=	((AN%100)/10)+48;
+		TXBUF[8]	=	(AN%10)+48;      //sync
+		TXBUF[9]	=',';
 		
 		////////////////////////////acc(x_accdeg)///////////////////////////
 		/*
@@ -803,33 +783,19 @@ void set_motor()   {
 		tt4=can;
 		
 		if (tt4<0){
-			SBUF	=	'-';
+			TXBUF[10]	=	'-';
 			tt4=-tt4;
 		}
-		else SBUF	=	' ';
-		while(TI==0);
-		TI=0;
+		else TXBUF[10]	=	' ';
 		
-		SBUF	=	(tt4/10000)+48;
-		while(TI==0);
-		TI=0;
+		TXBUF[11]	=	(tt4/10000)+48;
 		
-		SBUF	=	((tt4 % 10000)/1000)+48;
-		while(TI==0);
-		TI=0;
+		TXBUF[12]	=	((tt4 % 10000)/1000)+48;
 	  
-		SBUF	=	((tt4 % 1000)/100)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	((tt4%100)/10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	 (tt4%10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=',';
-		while(TI==0);
-		TI=0;
+		TXBUF[13]	=	((tt4 % 1000)/100)+48;
+		TXBUF[14]	=	((tt4%100)/10)+48;
+		TXBUF[15]	=	 (tt4%10)+48;
+		TXBUF[16]	=',';
 		
 		
 		///////////////////////KI//////////////////
@@ -837,33 +803,19 @@ void set_motor()   {
 		tt3=ban;
 		
 		if (tt3<0){
-			SBUF	=	'-';
+			TXBUF[17]	=	'-';
 			tt3=-tt3;
 		}
-		else SBUF	=	' ';
-		while(TI==0);
-		TI=0;
+		else TXBUF[17]	=	' ';
 		
-		SBUF	=	(tt3/10000)+48;
-		while(TI==0);
-		TI=0;
+		TXBUF[18]	=	(tt3/10000)+48;
 		
-		SBUF	=	((tt3 % 10000)/1000)+48;
-		while(TI==0);
-		TI=0;
+		TXBUF[19]	=	((tt3 % 10000)/1000)+48;
 	  
-		SBUF	=	((tt3 % 1000)/100)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	((tt3%100)/10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	(tt3%10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=',';
-		while(TI==0);
-		TI=0;
+		TXBUF[20]	=	((tt3 % 1000)/100)+48;
+		TXBUF[21]	=	((tt3%100)/10)+48;
+		TXBUF[22]	=	(tt3%10)+48;
+		TXBUF[23]	=',';
 	
 	
 	////////////////////////level///////////////////////
@@ -871,34 +823,21 @@ void set_motor()   {
 	tt5=dan;
 	
 	if (tt5<0){
-			SBUF	=	'-';
+			TXBUF[24]	=	'-';
 			tt5=-tt5;
 	}
-	else SBUF	=	' ';
-	while(TI==0);
-	TI=0;
+	else TXBUF[24]	=	' ';
 	
-	SBUF	=	(tt5/10000)+48;
-	while(TI==0);
-	TI=0;
+	TXBUF[25]	=	(tt5/10000)+48;
 	
-	SBUF	=	((tt5 % 10000)/1000)+48;
-	while(TI==0);
-	TI=0;
+	TXBUF[26]	=	((tt5 % 10000)/1000)+48;
   
-	SBUF	=	((tt5 % 1000)/100)+48;
-	while(TI==0);
-	TI=0;
-	SBUF	=	((tt5 % 100)/10)+48;
-	while(TI==0);
-	TI=0;
-	SBUF	=	(tt5 % 10)+48;
-	while(TI==0);
-	TI=0;
-	SBUF	=',';
-	while(TI==0);
-	TI=0;
+	TXBUF[27]	=	((tt5 % 1000)/100)+48;
+	TXBUF[28]	=	((tt5 % 100)/10)+48;
+	TXBUF[29]	=	(tt5 % 10)+48;
+	TXBUF[30]	=',';
 
+	SBUF=TXBUF[0];
 	sysclk=1;
 }
 
@@ -1000,6 +939,12 @@ void uart(void) interrupt 4            //ѱɮSEGWAY   ǪǃĤß
 {
 	if(TI){
 		TI=0;
+        if (TXposistion<TX_length_MAX){
+			SBUF=TXBUF[TXposistion];
+			TXposistion++;
+		}else {
+			TXposistion=0;
+		}
 	}
 	if(RI){
 			
