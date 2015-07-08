@@ -107,7 +107,7 @@ signed char Motor2percent;
 
 unsigned int analogRead(char channel)
 {
-    AUXR&=0x8F;                                 //3]ADRJ=0
+    AUXR&=0x8F;                                 //設ADRJ=0
     channel &= 0x07;                            
     ADCTL = 0x88|channel;                       //?}clAaf?  //-i?Ø ADCTL = 0x88|channel;
     while(!(ADCTL & 0x10));                    //Ø_ØEAaf?-Pa                 
