@@ -104,7 +104,7 @@ int j;
 int tipstart;
 signed char Motor1percent;
 signed char Motor2percent;
-#define TX_length_MAX 33  //
+#define TX_length_MAX 24  //
 unsigned char TXBUF[TX_length_MAX];
 unsigned char TXposistion=0;
 
@@ -687,7 +687,7 @@ void set_motor()   {
 	*/	
 	
 	///////////////////////////angle//////////////////////////
-	
+	/*
 	  aan=angle*100;
 		AN=aan;
 		if (AN<0){
@@ -700,11 +700,11 @@ void set_motor()   {
 		
 		TXBUF[6]	=	((AN % 10000)/1000)+48;
 	  
-		TXBUF[8]	=	((AN % 1000)/100)+48;
-		TXBUF[7]	=	((AN%100)/10)+48;
-		TXBUF[8]	=	(AN%10)+48;      //sync
-		TXBUF[9]	=',';
-		
+		TXBUF[7]	=	((AN % 1000)/100)+48;
+		TXBUF[8]	=	((AN%100)/10)+48;
+		TXBUF[9]	=	(AN%10)+48;      //sync
+		TXBUF[10]	=',';
+		*/
 		////////////////////////////acc(x_accdeg)///////////////////////////
 		/*
 		ban=y_accrad*100;
@@ -779,23 +779,23 @@ void set_motor()   {
 		
 		///////////////////////////////PD////////////////////////
 		
-		can=balance_torque*1000;
+		can=balance_torque*100;
 		tt4=can;
 		
 		if (tt4<0){
-			TXBUF[10]	=	'-';
+			TXBUF[4]	=	'-';
 			tt4=-tt4;
 		}
-		else TXBUF[10]	=	' ';
+		else TXBUF[4]	=	' ';
 		
-		TXBUF[11]	=	(tt4/10000)+48;
+		TXBUF[5]	=	(tt4/10000)+48;
 		
-		TXBUF[12]	=	((tt4 % 10000)/1000)+48;
+		TXBUF[6]	=	((tt4 % 10000)/1000)+48;
 	  
-		TXBUF[13]	=	((tt4 % 1000)/100)+48;
-		TXBUF[14]	=	((tt4%100)/10)+48;
-		TXBUF[15]	=	 (tt4%10)+48;
-		TXBUF[16]	=',';
+		TXBUF[7]	=	((tt4 % 1000)/100)+48;
+		TXBUF[8]	=	((tt4%100)/10)+48;
+		TXBUF[9]	=	 (tt4%10)+48;
+		TXBUF[10]	=',';
 		
 		
 		///////////////////////KI//////////////////
@@ -803,19 +803,19 @@ void set_motor()   {
 		tt3=ban;
 		
 		if (tt3<0){
-			TXBUF[17]	=	'-';
+			TXBUF[11]	=	'-';
 			tt3=-tt3;
 		}
-		else TXBUF[17]	=	' ';
+		else TXBUF[11]	=	' ';
 		
-		TXBUF[18]	=	(tt3/10000)+48;
+		TXBUF[12]	=	(tt3/10000)+48;
 		
-		TXBUF[19]	=	((tt3 % 10000)/1000)+48;
+		TXBUF[13]	=	((tt3 % 10000)/1000)+48;
 	  
-		TXBUF[20]	=	((tt3 % 1000)/100)+48;
-		TXBUF[21]	=	((tt3%100)/10)+48;
-		TXBUF[22]	=	(tt3%10)+48;
-		TXBUF[23]	=',';
+		TXBUF[14]	=	((tt3 % 1000)/100)+48;
+		TXBUF[15]	=	((tt3%100)/10)+48;
+		TXBUF[16]	=	(tt3%10)+48;
+		TXBUF[17]	=',';
 	
 	
 	////////////////////////level///////////////////////
@@ -823,19 +823,19 @@ void set_motor()   {
 	tt5=dan;
 	
 	if (tt5<0){
-			TXBUF[24]	=	'-';
+			TXBUF[18]	=	'-';
 			tt5=-tt5;
 	}
-	else TXBUF[24]	=	' ';
+	else TXBUF[18]	=	' ';
 	
-	TXBUF[25]	=	(tt5/10000)+48;
+	  TXBUF[19]	=	(tt5/10000)+48;
 	
-	TXBUF[26]	=	((tt5 % 10000)/1000)+48;
+	  TXBUF[20]	=	((tt5 % 10000)/1000)+48;
   
-	TXBUF[27]	=	((tt5 % 1000)/100)+48;
-	TXBUF[28]	=	((tt5 % 100)/10)+48;
-	TXBUF[29]	=	(tt5 % 10)+48;
-	TXBUF[30]	=',';
+	  TXBUF[21]	=	((tt5 % 1000)/100)+48;
+	  TXBUF[22]	=	((tt5 % 100)/10)+48;
+	  TXBUF[23]	=	(tt5 % 10)+48;
+	  TXBUF[24]	=',';
 
 	SBUF=TXBUF[0];
 	sysclk=1;
