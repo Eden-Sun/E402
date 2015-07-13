@@ -104,7 +104,7 @@ int j;
 int tipstart;
 signed char Motor1percent;
 signed char Motor2percent;
-#define TX_length_MAX 24  //
+#define TX_length_MAX 22  //
 unsigned char TXBUF[TX_length_MAX];
 unsigned char TXposistion=0;
 
