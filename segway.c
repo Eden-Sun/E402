@@ -6,7 +6,7 @@
 #define SABER_MOTOR2_FULL_FORWARD 255
 #define SABER_MOTOR2_FULL_REVERSE 129
 
-int AN;           //test_7/14
+int AN;           //test_7/14 abc
 int tt3,tt4,tt5;
 float aan,ban,can,dan;// 轉換變數
 int r=0,rd=0,ri=0;
