@@ -110,71 +110,67 @@ unsigned char TXposistion=0;
 
 unsigned int analogRead(char channel)
 {
-    AUXR&=0x8F;                                 //設ADRJ=0
-    channel &= 0x07;                            
-    ADCTL = 0x88|channel;                       //選擇 ADCTL = 0x88|channel;
-    while(!(ADCTL & 0x10));                    //Ø_ØEAaf?-Pa                 
-    return ((unsigned int)(ADCH<<2) | (ADCL & 3));
+	AUXR&=0x8F;                                 //設ADRJ=0
+	channel &= 0x07;                            
+	ADCTL = 0x88|channel;                       //選擇 ADCTL = 0x88|channel;
+	while(!(ADCTL & 0x10));                    //Ø_ØEAaf?-Pa                 
+	return ((unsigned int)(ADCH<<2) | (ADCL & 3));
 }
 
 char map(char x, char in_min, char in_max, char out_min, char out_max)
 {
-  return  (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+	return  (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 
 
 void sample_inputs()  {
-  gyrosum = 0;
-  steersum = 0;
-  hiresgyrosum = 0;
+	gyrosum = 0;
+	steersum = 0;
+	hiresgyrosum = 0;
   
-  accraw = analogRead(2); //read the accelerometer pin (0-1023)
-  adc4 = analogRead(0);
+	accraw = analogRead(2); //read the accelerometer pin (0-1023)
+	adc4 = analogRead(0);
 	sysclk=0;
 	//Take a set of 7 readings very fast
-  for (j=0; j<7; j++) {
-       adc1 = analogRead(1);
-       
-       adc5 = analogRead(3);
-       gyrosum =  gyrosum + adc1; //sum of the 7 readings
-       steersum=adc4;// = (float) steersum + adc4; //sum of the 7 readings
-       hiresgyrosum = (float)hiresgyrosum +adc5; //sum of the 7 readings
-                       }
-                       
-
-  a0 = a1;       
-  a1 = a2;
-  a2 = a3;
-  a3 = a4;
-  a4 = a5;
-  a5 = a6;
-  a6 = (float) accraw;
-  
-  accsum = (float) ((-2*a0) + (3*a1) + (6*a2) + (7*a3) + (6*a4) + (3*a5) + (-2*a6))/21; 
+	for (j=0; j<7; j++) {
+		adc1 = analogRead(1);
+		adc5 = analogRead(3);
+		gyrosum =  gyrosum + adc1; //sum of the 7 readings
+		steersum=adc4;// = (float) steersum + adc4; //sum of the 7 readings
+		hiresgyrosum = (float)hiresgyrosum + adc5; //sum of the 7 readings
+	}
+	a0 = a1;       
+	a1 = a2;
+	a2 = a3;
+	a3 = a4;
+	a4 = a5;
+	a5 = a6;
+	a6 = (float) accraw;
+	accsum = (float) ((-2*a0) + (3*a1) + (6*a2) + (7*a3) + (6*a4) + (3*a5) + (-2*a6))/21; 
 
 	b0 = b1;        
-  b1 = b2;
-  b2 = b3;
-  b3 = b4;
-  b4 = b5;
-  b5 = b6;
-  b6 = (float) adc4;
+	b1 = b2;
+	b2 = b3;
+	b3 = b4;
+	b4 = b5;
+	b5 = b6;
+	b6 = (float) adc4;
   
-  adcsteer = (float) ((-2*b0) + (3*b1) + (6*b2) + (7*b3) + (6*b4) + (3*b5) + (-2*b6))/21;  
+	adcsteer = (float) ((-2*b0) + (3*b1) + (6*b2) + (7*b3) + (6*b4) + (3*b5) + (-2*b6))/21;  
  
-  gangleratedeg2 = (float) ((steersum/7) - s) * 2.44;  //divide by 0.41 as for low resolution balance gyro i.e. multiply by 2.44
+	gangleratedeg2 = (float) ((steersum/7) - s) * 2.44;  //divide by 0.41 as for low resolution balance gyro i.e. multiply by 2.44
 	
   	//steer
-		 SteerCorrect = 0;
-		 
-		 er=(tt2-tt)>10?10:(tt2-tt);
-		 er=(tt2-tt)<-10?-10:(tt2-tt);
-		 sync=1.0*er+0.3*(er-er_p)+0.1*er_sum;
-		 er_p=er;
-		 er_sum+=er;
-		 if(er_sum>5000)er_sum=5000;
-		 if(er_sum<-5000)er_sum=-5000;
+	SteerCorrect = 0;
+
+	er=(tt2-tt)>10?10:(tt2-tt);
+	er=(tt2-tt)<-10?-10:(tt2-tt);
+	sync=1.0*er+0.3*(er-er_p)+0.1*er_sum;
+	er_p=er;
+	er_sum+=er;
+	if(er_sum>5000)er_sum=5000;
+	if(er_sum<-5000)er_sum=-5000;
 	
 		/*if(!issteer)SteerValue=512-((adcsteer) - s)* 6;	
 		if(issteer)SteerValue=512;	                            //àƳ ŢȢҍƎ
@@ -184,78 +180,73 @@ void sample_inputs()  {
 		if(SteerValue<524&&SteerValue>500)SteerValue=512;
 		//else SteerValue=512+steer_control+50-sync;//+((adcsteer) - s)* 16;
 		*/
-	
 		
-    if(turnR==0&&turnL==0)SteerValue=512;
-		else if(turnR==0)SteerValue=512-30;
-		else if(turnL==0)SteerValue=512+30;
-		else SteerValue=512;
-			
-   
-		    if (SteerValue < 1) {
-                    SteerValue = 1;
-                        } 
-        if (SteerValue > 1023) {
-                    SteerValue = 1023;
-                           }
+	if(turnR==0&&turnL==0)SteerValue=512;
+	else if(turnR==0)SteerValue=512-30;
+	else if(turnL==0)SteerValue=512+30;
+	else SteerValue=512;
+	if (SteerValue < 1) {
+		SteerValue = 1;
+	} 
+	if (SteerValue > 1023) {
+		SteerValue = 1023;
+	}
 		// steer											 
 													 
 													 
 	y_accrad=(float)((accsum - (335 + balancetrim))*5/1024/0.277* 0.923315/0.0174533);
 	if (y_accrad < -72) y_accrad = -72; //rejects silly values to stop it going berserk!
-  if (y_accrad > 72) y_accrad = 72;
+	if (y_accrad > 72) y_accrad = 72;
 													
-  x_accdeg = (float)((accsum - (initial_balancetrim + balancetrim))* 0.923315);  //0.862); //approx 1.16 steps per degree so divide by 1.16 i.e. multiply by 0.862 / 0.923315
-  if (x_accdeg < -72) x_accdeg = -72; //rejects silly values to stop it going berserk!
-  if (x_accdeg > 72) x_accdeg = 72;
-  
+	x_accdeg = (float)((accsum - (initial_balancetrim + balancetrim))* 0.923315);  //0.862); //approx 1.16 steps per degree so divide by 1.16 i.e. multiply by 0.862 / 0.923315
+	if (x_accdeg < -72) x_accdeg = -72; //rejects silly values to stop it going berserk!
+	if (x_accdeg > 72) x_accdeg = 72;
 
-  gangleratedeg = (float)(0+(g-(gyrosum/7) )*2.44); //divide by 0.41 for low res balance gyro i.e. multiply by 2.44
-  
-  if (gangleratedeg < -450) gangleratedeg = -450; //stops crazy values entering rest of the program
-  if (gangleratedeg > 450) gangleratedeg = 450;
-  	
+	gangleratedeg = (float)(0+(g-(gyrosum/7) )*2.44); //divide by 0.41 for low res balance gyro i.e. multiply by 2.44
+
+	if (gangleratedeg < -450) gangleratedeg = -450; //stops crazy values entering rest of the program
+	if (gangleratedeg > 450) gangleratedeg = 450;
+		
 	tt=accsum;							
 	tt2=gyrosum/7;											 
 		 
 											 
 													 
   //..BUT...Hires gyro ideally used to re-calculate the rate of tipping in degrees per sec, i.e. use to calculate gangleratedeg IF rate is less than 100 deg per sec
-  if (gangleratedeg < 100 && gangleratedeg > -100) {
-      gangleratedeg = (float)(0+(t-(hiresgyrosum/7) )*0.538); //divide by 1.86 i.e. multiply by 0.538
-        if (gangleratedeg < -110) gangleratedeg = -110;
-        if (gangleratedeg > 110) gangleratedeg = 110;
-                           }
+	if (gangleratedeg < 100 && gangleratedeg > -100) {
+		gangleratedeg = (float)(0+(t-(hiresgyrosum/7) )*0.538); //divide by 1.86 i.e. multiply by 0.538
+		if (gangleratedeg < -110) gangleratedeg = -110;
+		if (gangleratedeg > 110) gangleratedeg = 110;
+	}
  
-  gyroangledt = (float) gyroscalingfactor * cycle_time * gangleratedeg;
+	gyroangledt = (float) gyroscalingfactor * cycle_time * gangleratedeg;
     
-  gangleraterads = (float) gangleratedeg * 0.017453; //convert to radians - just a scaling issue from history
-  angle = (float) ((1-aa) * (angle + gyroangledt)) - (aa * x_accdeg); // minus sign here is because accel is wrong way around relative to the gyro
-  //aa allows us to feed a bit (0.5%) of the accelerometer data into the angle calculation
-  //so it slowly corrects the gyro (which drifts slowly with tinme remember). Accel sensitive to vibration though so aa does not want to be too large.
-  //this is why these boards do not work if an accel only is used. We use gyro to do short term tilt measurements because it is insensitive to vibration
-  //the video on my instructable shows the skateboard working fine over a brick cobbled surface - vibration +++ !
-  anglerads = (float) angle * 0.017453; //converting to radians again a historic scaling issue from past software
+	gangleraterads = (float) gangleratedeg * 0.017453; //convert to radians - just a scaling issue from history
+	angle = (float) ((1-aa) * (angle + gyroangledt)) - (aa * x_accdeg); // minus sign here is because accel is wrong way around relative to the gyro
+	//aa allows us to feed a bit (0.5%) of the accelerometer data into the angle calculation
+	//so it slowly corrects the gyro (which drifts slowly with tinme remember). Accel sensitive to vibration though so aa does not want to be too large.
+	//this is why these boards do not work if an accel only is used. We use gyro to do short term tilt measurements because it is insensitive to vibration
+	//the video on my instructable shows the skateboard working fine over a brick cobbled surface - vibration +++ !
+	anglerads = (float) angle * 0.017453; //converting to radians again a historic scaling issue from past software
   
   
-  switch(rr)
-	{
-	  case '1':
+	switch(rr){
+		case '1':
 			if(rd<125||ri<125)
-		{
-			if(rd<125)
 			{
-		  rd++;
-			}else rd=125;
+				if(rd<125)
+				{
+		  		rd++;
+				}
+				else rd=125;
 			
-			if(ri<125)
-			{
-			ri++;
-			}else ri=125;
-  				
-		}
-		  break;
-		
+				if(ri<125)
+				{
+				ri++;
+				}
+				else ri=125;
+			}
+			break;
 		case '2':			
 			if(ri!=62)
 		{
