@@ -122,8 +122,6 @@ char map(char x, char in_min, char in_max, char out_min, char out_max)
 	return  (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-
-
 void sample_inputs()  {
 	gyrosum = 0;
 	steersum = 0;
@@ -236,13 +234,13 @@ void sample_inputs()  {
 			{
 				if(rd<125)
 				{
-		  		rd++;
+					rd++;
 				}
 				else rd=125;
 			
 				if(ri<125)
 				{
-				ri++;
+					ri++;
 				}
 				else ri=125;
 			}
@@ -883,15 +881,11 @@ void waitstartloop ()
 	balancetrim = 0;
 	T2CON=0x04;  // TR2=1;               
 }
-
-
 main()
 {
-	
 	TMOD=0x22;  // timer mode T1 & T0 run at mode 2
 	// setup Timer 0 
 	// timer 0 is for PWM frequency 
-
 	TH0=253;    //PWM=f/256/18=400MHZ @22M
 	TL0=253;  //PWM
 	TH1=250; //255  
@@ -1001,60 +995,47 @@ void uart(void) interrupt 4            //ѱɮSEGWAY   ǪǃĤß
 			}
 	}
 }	
-	void t2(void) interrupt 5 
+void t2(void) interrupt 5 
 {
-
-TF2=0;	
-t2clk=~t2clk;	
-
-  
-  sample_inputs();
-  set_motor();
-
-
-   if (overallgain < 0.5) {
-       overallgain = (float)overallgain + 0.005;
-                          }
-   if (overallgain > 0.5) {overallgain = 0.5;}
- //XXXXXXXXXXXXXXX end of softstart code XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-  
-
-	
+	TF2=0;	
+	t2clk=~t2clk;
+	sample_inputs();
+	set_motor();
+	if (overallgain < 0.5)overallgain = (float)overallgain + 0.005;
+	if (overallgain > 0.5)overallgain = 0.5;
 }
 
-	void PWM(unsigned char buf)     //ࠩƘPWM
+void PWM(unsigned char buf)     //ࠩƘPWM
 {
-	
-		if(buf==0){  //all stop
-			CCAPM2=0x00;
-			CCAPM3=0x00;
-			CCAPM4=0x00;
-			CCAPM5=0x00;
-		}
-		else if(buf<64){
-			
-			CCAP2H=255-(buf*4);
-			CCAPM2=0x42;
-			CCAPM3=0x00;
-		}else if(buf<128){
-			
-			CCAPM2=0x00;
-			CCAPM3=0x42;
-			CCAP3H=(buf-64)*4;            //2.3ŀӕ
-			
-		}else if(buf<192){
-			
-			CCAPM4=0x42;
-			CCAP4H=255-((buf-128)*4);
-			CCAPM5=0x00;
-			
-		}else {
-			
-			CCAPM4=0x00;
-			CCAPM5=0x42;
-			CCAP5H=((buf-192)*4);         //4.5ŀӕ  
-			
-		}
-	
+	if(buf==0){  //all stop
+		CCAPM2=0x00;
+		CCAPM3=0x00;
+		CCAPM4=0x00;
+		CCAPM5=0x00;
 	}
+	else if(buf<64){
+		
+		CCAP2H=255-(buf*4);
+		CCAPM2=0x42;
+		CCAPM3=0x00;
+	}else if(buf<128){
+		
+		CCAPM2=0x00;
+		CCAPM3=0x42;
+		CCAP3H=(buf-64)*4;            //2.3ŀӕ
+		
+	}else if(buf<192){
+		
+		CCAPM4=0x42;
+		CCAP4H=255-((buf-128)*4);
+		CCAPM5=0x00;
+		
+	}else {
+		
+		CCAPM4=0x00;
+		CCAPM5=0x42;
+		CCAP5H=((buf-192)*4);         //4.5ŀӕ  
+		
+	}
+
+}
