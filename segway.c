@@ -122,7 +122,8 @@ char map(char x, char in_min, char in_max, char out_min, char out_max)
 	return  (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-void sample_inputs()  {
+void sample_inputs()  
+{
 	gyrosum = 0;
 	steersum = 0;
 	hiresgyrosum = 0;
@@ -131,7 +132,8 @@ void sample_inputs()  {
 	adc4 = analogRead(0);
 	sysclk=0;
 	//Take a set of 7 readings very fast
-	for (j=0; j<7; j++) {
+	for (j=0; j<7; j++) 
+	{
 		adc1 = analogRead(1);
 		adc5 = analogRead(3);
 		gyrosum =  gyrosum + adc1; //sum of the 7 readings
@@ -183,12 +185,14 @@ void sample_inputs()  {
 	else if(turnR==0)SteerValue=512-30;
 	else if(turnL==0)SteerValue=512+30;
 	else SteerValue=512;
-	if (SteerValue < 1) {
+	if (SteerValue < 1) 
+		{
 		SteerValue = 1;
-	} 
-	if (SteerValue > 1023) {
+		} 
+	if (SteerValue > 1023) 
+		{
 		SteerValue = 1023;
-	}
+		}
 		// steer											 
 													 
 													 
@@ -211,11 +215,12 @@ void sample_inputs()  {
 											 
 													 
   //..BUT...Hires gyro ideally used to re-calculate the rate of tipping in degrees per sec, i.e. use to calculate gangleratedeg IF rate is less than 100 deg per sec
-	if (gangleratedeg < 100 && gangleratedeg > -100) {
+	if (gangleratedeg < 100 && gangleratedeg > -100) 
+		{
 		gangleratedeg = (float)(0+(t-(hiresgyrosum/7) )*0.538); //divide by 1.86 i.e. multiply by 0.538
 		if (gangleratedeg < -110) gangleratedeg = -110;
 		if (gangleratedeg > 110) gangleratedeg = 110;
-	}
+		}
  
 	gyroangledt = (float) gyroscalingfactor * cycle_time * gangleratedeg;
     
@@ -228,7 +233,8 @@ void sample_inputs()  {
 	anglerads = (float) angle * 0.017453; //converting to radians again a historic scaling issue from past software
   
   
-	switch(rr){
+	switch(rr)
+		{
 		case '1':
 			if(rd<125||ri<125)
 			{
@@ -247,101 +253,101 @@ void sample_inputs()  {
 			break;
 		case '2':			
 			if(ri!=62)
-		{
-			if(ri>62)
 			{
-				ri--;
-			}
+				if(ri>62)
+				{
+					ri--;
+				}
 			else if(ri<62)
+				{
+					ri++;
+				}else ri=62;
+			}
+			if(rd<125)
 			{
-				ri++;
-			}else ri=62;
-		}
-		if(rd<125)
-		{
-			rd++;
-		}else rd=125;
+				rd++;
+			}else rd=125;
 			break;
 		
 		case '3':
 			if(rd!=62||ri!=62)
-		{
-			if(rd>62)
 			{
-				rd--;
-			}
-			else if(rd<62)
-			{
-				rd++;
-			}else rd=62;
+				if(rd>62)
+				{
+					rd--;
+				}
+				else if(rd<62)
+				{
+					rd++;
+				}else rd=62;
 			
-			if(ri>62)
-			{
-				ri--;
+				if(ri>62)
+				{
+					ri--;
+				}
+				else if(ri<62)
+				{
+					ri++;
+				}else ri=62;
 			}
-			else if(ri<62)
-			{
-				ri++;
-			}else ri=62;
-		}
-		break;
+			break;
 		
 		case '4':
 		  if(rd!=0||ri!=0)
 			{
 				if(rd>0)
-			{
-				rd--;
-			}
-			else if(rd<0)
-			{
-				rd++;
-			}else rd=0;
+				{
+					rd--;
+				}
+				else if(rd<0)
+				{
+					rd++;
+				}else rd=0;
 			
-			if(ri>0)
-			{
-				ri--;
+				if(ri>0)
+				{
+					ri--;
+				}
+				else if(ri<0)
+				{
+					ri++;
+				}else ri=0;
 			}
-			else if(ri<0)
-			{
-				ri++;
-			}else ri=0;
-		}
-		break;
+			break;
 		
 		
 		case '5':
 			if(rd>-125||ri>-125)
-		{
-			if(rd>-125)
 			{
-		  rd--;
-			}else rd=-125;
+				if(rd>-125)
+				{
+					rd--;
+				}else rd=-125;
 			
-			if(ri>-125)
-			{
-			ri--;
-			}else ri=-125;
+				if(ri>-125)
+				{
+					ri--;
+				}else ri=-125;
   				
-		}
+			}
 		  break;
 		
 		case '6':			
 			if(ri!=-62)
-		{
-			if(ri>-62)
 			{
-				ri--;
+				if(ri>-62)
+				{
+					ri--;
+				}
+				else if(ri<-62)
+				{
+					ri++;
+				}else ri=-62;
 			}
-			else if(ri<-62)
+			if(rd>-125)
 			{
-				ri++;
-			}else ri=-62;
-		}
-		if(rd>-125)
-		{
-			rd--;
-		}else rd=-125;
+				rd--;
+			}else rd=-125;
 			break;
 		
 		case '7':
@@ -424,35 +430,6 @@ else if(r<4000)
    cur_speed = (float) (cur_speed + ((anglerads)* 5.5 * cycle_time)) *0.999;   //0.999	
 }else r=0;	
 */													 
-													 
-  
-	//ŭࠅ												 
-		/*
-		balance_torque = (float) (4.5 * (anglerads)) + (0.5 * gangleraterads);   //4.5
-   cur_speed = (float) (cur_speed + ((anglerads-0.002*r)* 5.5 * cycle_time)) *0.999;   //0.999
-		*/											 
-													 
-	//Ƴɵ࠰̥ש												 
-	/*
-						r++;							 
-if(r<250)
-{
-	balance_torque = (float) (4.5 * (anglerads-0.002*r)) + (0.5 * gangleraterads);   //4.5
-   cur_speed = (float) (cur_speed + ((anglerads*0.002*r)* 5.5 * cycle_time)) *0.999;   //0.999	
-
-}
-else if(r<500)
-{
-	balance_torque = (float) (4.5 * (anglerads-0.002*(500-r))) + (0.5 * (gangleraterads));   //4.5
-   cur_speed = (float) (cur_speed + ((anglerads*0.001*(500-r))* 5.5 * cycle_time)) *0.999;   //0.999	
-}
-/*else if(r<750)
-{
-	 balance_torque = (float) (4.5 * (anglerads)) + (0.5 * gangleraterads);   //4.5
-   cur_speed = (float) (cur_speed + ((anglerads)* 5.5 * cycle_time)) *0.999;   //0.999	
-}*//*
-else
-	r=0;*/
 
  
   level = (float)(balance_torque + cur_speed) * overallgain+forward_control;  
@@ -535,141 +512,9 @@ void set_motor()   {
 	
  
 		
-/*									 SBUF	='L';         //͝Έ!!!
-		while(TI==0);
-		TI=0;
-		
-								 SBUF	='t';
-		while(TI==0);
-		TI=0;
- 
- 								 SBUF	='t';
-		while(TI==0);
-		TI=0;
-		
-		
-								 SBUF	='=';
-		while(TI==0);
-		TI=0;
-*/	
+
 		TXBUF[0]	='a';         //͝Έ!!!
-		
-		
-		
-		/////////////////////////////adc acc///////////////////////
-		
-		/*
- 
-		if (tt<0){
-			SBUF	=	'-';
-			tt=-tt;
-		}
-		else SBUF	=	' ';
-		while(TI==0);
-		TI=0;
-		
-		SBUF	=	(tt/10000)+48;
-		while(TI==0);
-		TI=0;
-		
-		SBUF	=	((tt % 10000)/1000)+48;
-		while(TI==0);
-		TI=0;
-	  
-		SBUF	=	((tt % 1000)/100)+48;
-		while(TI==0);
-		TI=0;
-	  SBUF	=	((tt%100)/10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	(tt%10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=',';
-		while(TI==0);
-		TI=0;
-		
-		/*
-							 SBUF	=' ';
-		while(TI==0);
-		TI=0;
-
-
-										 SBUF	='R';
-		while(TI==0);
-		TI=0;
-		
-								 SBUF	='t';
-		while(TI==0);
-		TI=0;
-		
-									 SBUF	='t';
-		while(TI==0);
-		TI=0;
-		
-								 SBUF	='2';
-		while(TI==0);
-		TI=0;
-		
-								 SBUF	='=';
-		while(TI==0);
-		TI=0;*/
-
-
-/////////////////////////adc gyro////////////////////////
-/*
-
-    if (tt2<0){
-			SBUF	=	'-';
-			tt2=-tt2;
-		}
-		else SBUF	=	' ';
-		while(TI==0);
-		TI=0;
-		
-		SBUF	=	(tt2/10000)+48;
-		while(TI==0);
-		TI=0;
-		
-		SBUF	=	((tt2 % 10000)/1000)+48;
-		while(TI==0);
-		TI=0;
-	  
-		SBUF	=	((tt2 % 1000)/100)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	((tt2%100)/10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	(tt2%10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=',';
-		while(TI==0);
-		TI=0;
-		
-		
-/*									 SBUF	=' ';
-		while(TI==0);
-		TI=0;
-		
-								SBUF	='s';
-		while(TI==0);
-		TI=0;
-		
-								 SBUF	='y';
-		while(TI==0);
-		TI=0;
-		
-								 SBUF	='n';
-		while(TI==0);
-		TI=0;
-		
-								 SBUF	='=';
-		while(TI==0);
-		TI=0;
-	*/	
-	
+			
 	///////////////////////////angle//////////////////////////
 	/*
 	  aan=angle*100;
@@ -689,78 +534,7 @@ void set_motor()   {
 		TXBUF[9]	=	(AN%10)+48;      //sync
 		TXBUF[10]	=',';
 		*/
-		////////////////////////////acc(x_accdeg)///////////////////////////
-		/*
-		ban=y_accrad*100;
-		//ban=x_accdeg*100;
-		tt3=ban;
-		
-		 if (tt3<0){
-			SBUF	=	'-';
-			tt3=-tt3;
-		}
-		else SBUF	=	' ';
-		while(TI==0);
-		TI=0;
-		
-		SBUF	=	(tt3/10000)+48;
-		while(TI==0);
-		TI=0;
-		
-		SBUF	=	((tt3 % 10000)/1000)+48;
-		while(TI==0);
-		TI=0;
-	  
-		SBUF	=	((tt3 % 1000)/100)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	((tt3%100)/10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	(tt3%10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=',';
-		while(TI==0);
-		TI=0;
-		*/
-		
-		//////////////////////////gyro(gyroangledt)///////////////
-		/*
-		can=gyroangledt*100;
-		tt4=can;
-		
-		 if (tt4<0){
-			SBUF	=	'-';
-			tt4=-tt4;
-		}
-		else SBUF	=	' ';
-		while(TI==0);
-		TI=0;
-		
-		SBUF	=	(tt4/10000)+48;
-		while(TI==0);
-		TI=0;
-		
-		SBUF	=	((tt4 % 10000)/1000)+48;
-		while(TI==0);
-		TI=0;
-	  
-		SBUF	=	((tt4 % 1000)/100)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	((tt4%100)/10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=	 (tt4%10)+48;
-		while(TI==0);
-		TI=0;
-		SBUF	=',';
-		while(TI==0);
-		TI=0;
-		*/
-		
-		
+
 		///////////////////////////////PD////////////////////////
 		
 		can=balance_torque*100;
