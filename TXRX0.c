@@ -18,6 +18,9 @@ char endatacont=0;
 #define TX_length_MAX 16  //UART1 TX cad
 unsigned char TXBUF[TX_length_MAX];
 unsigned char TXposistion=0;
+#define test_MAX 3
+unsigned char test[test_MAX];
+unsigned char testn=0;
 main()
 {
 	//TMOD=0x20;
@@ -30,8 +33,8 @@ main()
 	AUXR2|=0x54;//3on
 	AUXR=0x80;
 	AUXIE|=0x10;
-	IE=0x91;
-	
+	IE=0x90;
+	test[0]='1';
 	while(1);
 		
 }
@@ -47,13 +50,19 @@ void delay(int count)
 void S2CON_int(void) interrupt 12
 {
 	
-	a=S2BUF;
-	S2BUF=a+48;
-	while(!(S2CON&0x02));
-	S2CON&=0xfd;
+	
+	//S2BUF=a;
+	//while(!(S2CON&0x02));
+	//S2CON&=0xfd;
 	if(S2CON&0x01==0x01)//RI
 	{
 		S2CON&=0xfe;
+		a=S2BUF;
+		/*if(a=='q')
+		{
+			S2BUF='\n';
+			SW3=1;
+		}
 		/*
 		if(a=='9'){
 			if(SW1==0){
@@ -75,7 +84,7 @@ void S2CON_int(void) interrupt 12
 				SW2=0;
 				SW3=0;
 			}
-		}*/
+		}*//*
 		if(SW2!=1)
 		{
 			if(a=='9')
@@ -86,9 +95,8 @@ void S2CON_int(void) interrupt 12
 				SW1=0;
 			}
 			else SW1=0;
-		}
+		}*/
 		
-		/*
 		if(SW3!=1)
 		{
 			if(a=='9')
@@ -96,8 +104,10 @@ void S2CON_int(void) interrupt 12
 				if(SW1==1)
 				{
 					SW2=2;
+					test[1]=SW2;
 				}
 				SW1=1;
+				test[0]=SW1;
 			}else	SW1=0;
 			S2CON&=0xfe;
 			if(SW2==2)
@@ -105,6 +115,7 @@ void S2CON_int(void) interrupt 12
 				if(a=='b')
 				{
 					SW3=1;
+					test[2]=SW3;
 					SW1=0;
 					SW2=0;
 				}
@@ -113,8 +124,7 @@ void S2CON_int(void) interrupt 12
 						SW2=0;
 					}
 			}
-			S2CON&=0xfe;
-		}*/
+		}else S2BUF='\n';
 		/*else
 		{
 			S2CON&=0xfe;
@@ -146,51 +156,38 @@ void S2CON_int(void) interrupt 12
 						t+=encodedata[1];
 						t=t<<6;
 						t+=encodedata[2];
-						S2BUF=(t/1000)+48;
-						while(!(S2CON&0x02));
-						S2CON&=0xfd;
-						S2BUF=(t%1000/100)+48;
-						while(!(S2CON&0x02));
-						S2CON&=0xfd;
-						S2BUF=(t%100/10)+48;
-						while(!(S2CON&0x02));
-						S2CON&=0xfd;
-						S2BUF=(t%10)+48;
-						while(!(S2CON&0x02));
-						S2CON&=0xfd;
 						endatacont=0;
 				}
 			}
 		}
 		endatacont=0;			
 		}*/
-		/*S2CON&=0xfe;
-		S2BUF=SW1+48;
-		while(!(S2CON&0x02));
-		S2CON&=0xfd;
-		S2BUF=SW2+48;
-		while(!(S2CON&0x02));
-		S2CON&=0xfd;
-		S2BUF=SW3+48;
-		while(!(S2CON&0x02));
-		S2CON&=0xfd;	
 		
-		S2BUF=rr+48;
-		while(!(S2CON&0x02));
-		S2CON&=0xfd;
-		/*S2BUF=sp+48;
-		while(!(S2CON&0x02));
-		S2CON&=0xfd;
-		S2BUF=endatacont+48;
-		while(!(S2CON&0x02));
-		S2CON&=0xfd;
-		S2BUF=encodedata[endatacont-1]+48;
-		while(!(S2CON&0x02));
-		S2CON&=0xfd;*/
-		/*S2BUF='\n';
-		while(!(S2CON&0x02));
-		S2CON&=0xfd;*/
 	}
+	if(S2CON&0x02==0x02)
+	{
+		S2CON&=0xfd;
+		if(testn<test_MAX)
+		{
+			S2BUF=test[testn];
+			testn++;
+		}else testn=0;
+	}
+	S2CON&=0xfd;
+	/*
+	S2CON&=0xfe;
+	S2BUF=SW1+48;
+	while(!(S2CON&0x02));
+	S2CON&=0xfd;
+	S2BUF=SW2+48;
+	while(!(S2CON&0x02));
+	S2CON&=0xfd;
+	S2BUF=SW3+48;
+	while(!(S2CON&0x02));
+	S2CON&=0xfd;	
+	S2BUF='\n';
+	while(!(S2CON&0x02));
+	S2CON&=0xfd;*/
 }
 
 void SCON_int(void) interrupt 4
