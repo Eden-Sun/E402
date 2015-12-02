@@ -609,7 +609,7 @@ void waitstartloop ()
 	level = 0;
 	Steer = 0;
 	balancetrim = 0;
-	for (i=0; i<200; i++) {
+	for (i=0; i<200; i++) {1101
   	
 		S2BUF=0xaa;
 		while((S2CON&0x02)==0);
@@ -662,8 +662,8 @@ main()
 	// timer 0 is for PWM frequency 
 	TH0=253;    //PWM=f/256/18=400MHZ @22M
 	TL0=253;  //PWM
-	TH1=250; //255  
-	TL1=250;  //255
+	TH1=250; //255 250 
+	TL1=250;  //255 250
 	AUXR2=0xd8;  //t1 t0 X12  S2MOD=1
 	TR1=1;
 	TR0=1;
@@ -694,12 +694,13 @@ void uart(void) interrupt 4            //ѱɮSEGWAY   ǪǃĤß
 {
 	if(TI){
 		TI=0;
-        if (TXposistion<TX_length_MAX){
+      if (TXposistion<TX_length_MAX){
 			SBUF=TXBUF[TXposistion];
 			TXposistion++;
 		}else {
 			TXposistion=0;
 		}
+		
 	}
 	if(RI){
 			
