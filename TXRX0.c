@@ -1,5 +1,8 @@
 //E:\程式
 #include <516.h>
+#include <stdio.h>
+char keytr[3]={'9','9','b'};
+char keymatch=0;
 int r=0,rr=0;
 int sp=0;
 int t=0,k=0,kk=0,key=0;//t is distance data of UART2 k is -48 of loop
@@ -54,14 +57,54 @@ void S2CON_int(void) interrupt 12
 	//S2BUF=a;
 	//while(!(S2CON&0x02));
 	//S2CON&=0xfd;
+	if(S2CON&0x02==0x02)
+	{
+		S2CON&=0xfd;
+	}
 	if(S2CON&0x01==0x01)//RI
 	{
 		S2CON&=0xfe;
 		a=S2BUF;
-		/*if(a=='q')
+		if(SW1!=1)
 		{
-			S2BUF='\n';
-			SW3=1;
+		if(keymatch>2)
+			keymatch=0;
+		if(a==keytr[keymatch])
+		{
+			keymatch++;
+		}else{
+			keymatch=0;
+		}
+		S2BUF=keymatch+48;
+		while(!(S2CON&0x02));
+		S2CON&=0xfd;
+		if(keymatch==3)
+			SW1=1;
+		if(keymatch>2)
+			keymatch=0;
+		}else
+		{
+			if(a=='\n')
+				sp++;			
+			if(sp<2)
+			{
+			S2BUF=sp+48;
+			while(!(S2CON&0x02));
+			S2CON&=0xfd;
+			}
+			if(sp==2&&a!='\n')
+			{
+				if(endatacont>3)
+					endatacont=0;
+				if(endatacont<encodedata_MAX)
+				{
+					encodedata[endatacont]=a;
+					endatacont++;
+				}else SW2=1;
+				S2BUF=encodedata[endatacont-1];
+				while(!(S2CON&0x02));
+				S2CON&=0xfd;
+			}
 		}
 		/*
 		if(a=='9'){
@@ -97,17 +140,17 @@ void S2CON_int(void) interrupt 12
 			else SW1=0;
 		}*/
 		
-		if(SW3!=1)
+		/*if(SW3!=1)
 		{
 			if(a=='9')
 			{
 				if(SW1==1)
 				{
 					SW2=2;
-					test[1]=SW2;
+					//test[1]=SW2;
 				}
 				SW1=1;
-				test[0]=SW1;
+				//test[0]=SW1;
 			}else	SW1=0;
 			S2CON&=0xfe;
 			if(SW2==2)
@@ -115,7 +158,7 @@ void S2CON_int(void) interrupt 12
 				if(a=='b')
 				{
 					SW3=1;
-					test[2]=SW3;
+					//test[2]=SW3;
 					SW1=0;
 					SW2=0;
 				}
@@ -124,8 +167,8 @@ void S2CON_int(void) interrupt 12
 						SW2=0;
 					}
 			}
-		}else S2BUF='\n';
-		/*else
+		}
+		/*else//////////////
 		{
 			S2CON&=0xfe;
 			if(a=='\n')
@@ -164,14 +207,18 @@ void S2CON_int(void) interrupt 12
 		}*/
 		
 	}
+	/*
 	if(S2CON&0x02==0x02)
 	{
 		S2CON&=0xfd;
-		if(testn<test_MAX)
+		while(testn<test_MAX)
 		{
 			S2BUF=test[testn];
+			while(!(S2CON&0x02));
+			S2CON&=0xfd;
 			testn++;
-		}else testn=0;
+		}
+		testn=0;
 	}
 	S2CON&=0xfd;
 	/*
