@@ -52,11 +52,25 @@ void delay(int count)
 
 void S2CON_int(void) interrupt 12
 {
-	
-	
-	//S2BUF=a;
-	//while(!(S2CON&0x02));
-	//S2CON&=0xfd;
+	if(SW3==1)
+	{
+		S2BUF='\n';
+		while(!(S2CON&0x02));
+		S2CON&=0xfd;
+		S2BUF=t/1000+48;
+		while(!(S2CON&0x02));
+		S2CON&=0xfd;
+		S2BUF=(t%1000)/100+48;
+		while(!(S2CON&0x02));
+		S2CON&=0xfd;
+		S2BUF=(t%100)/10+48;
+		while(!(S2CON&0x02));
+		S2CON&=0xfd;
+		S2BUF=t%10+48;
+		while(!(S2CON&0x02));
+		S2CON&=0xfd;
+		SW3=0;
+	}
 	if(S2CON&0x02==0x02)
 	{
 		S2CON&=0xfd;
@@ -65,47 +79,90 @@ void S2CON_int(void) interrupt 12
 	{
 		S2CON&=0xfe;
 		a=S2BUF;
-		if(SW1!=1)
-		{
-		if(keymatch>2)
-			keymatch=0;
-		if(a==keytr[keymatch])
-		{
-			keymatch++;
-		}else{
-			keymatch=0;
-		}
-		S2BUF=keymatch+48;
-		while(!(S2CON&0x02));
-		S2CON&=0xfd;
-		if(keymatch==3)
-			SW1=1;
-		if(keymatch>2)
-			keymatch=0;
-		}else
-		{
-			if(a=='\n')
-				sp++;			
-			if(sp<2)
+		if(SW2!=1)
+		{			
+			if(SW1!=1)
 			{
-			S2BUF=sp+48;
+			if(keymatch>2)
+				keymatch=0;
+			if(a==keytr[keymatch])
+			{
+				keymatch++;
+			}else{
+				keymatch=0;
+			}
+			S2BUF=keymatch+48;
 			while(!(S2CON&0x02));
 			S2CON&=0xfd;
-			}
-			if(sp==2&&a!='\n')
+			if(keymatch==3)
+				SW1=1;
+			if(keymatch>2)
+				keymatch=0;
+			}else
 			{
-				if(endatacont>3)
-					endatacont=0;
-				if(endatacont<encodedata_MAX)
+				if(a=='\n')
+					sp++;			
+				if(sp<2)
 				{
-					encodedata[endatacont]=a;
-					endatacont++;
-				}else SW2=1;
-				S2BUF=encodedata[endatacont-1];
+				S2BUF=sp+48;
 				while(!(S2CON&0x02));
 				S2CON&=0xfd;
+				}
+				if(sp==2&&a!='\n')
+				{ 
+					if(endatacont>3)
+						endatacont=0;
+					if(endatacont<encodedata_MAX)
+					{
+						encodedata[endatacont]=a;
+						endatacont++;
+					}
+					if(endatacont==4)
+					{
+						SW2=1;
+						sp=0;
+					}					
+					S2BUF=encodedata[endatacont-1];
+					while(!(S2CON&0x02));
+					S2CON&=0xfd;
+					if(endatacont>3)
+						endatacont=0;
+				}
+			}
+		}else
+		{
+			kk=0;
+			S2BUF='p';
+	  	while(!(S2CON&0x02));
+	  	S2CON&=0xfd;
+			for(k=0;k<3;k++)
+			{
+				kk=kk+encodedata[k];
+			}
+			key=(kk&0x3f)+48;
+			if(key!=encodedata[3])
+			{
+				SW2=0;
+				SW1=0;
+			}
+			if(SW2==1)
+			{
+				for(k=0;k<3;k++)
+				{
+				encodedata[k]-=48;
+				}
+				t=(int)encodedata[0];
+				t=t<<6;
+				t+=encodedata[1];
+				t=t<<6;
+				t+=encodedata[2];
+				endatacont=0;
+				SW3=1;
+				SW1=0;
+				SW2=0;
 			}
 		}
+		
 		/*
 		if(a=='9'){
 			if(SW1==0){
